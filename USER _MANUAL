@@ -1,0 +1,74 @@
+Auto Emailer - Usage Guide
+
+This guide explains how to use the Auto Emailer project.
+
+1. SETUP
+
+Make sure you have Python 3.8 or above installed.
+
+Clone or download this repository.
+
+Open the folder in VS Code or any text editor.
+
+2. INSTALL REQUIREMENTS
+
+Run this command in the terminal (inside the project folder):
+
+pip install -r requirements.txt
+
+3. CONFIGURE EMAIL SETTINGS
+
+Copy the file config_example.env and rename it as .env
+
+Open .env and fill in your details:
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+EMAIL_ADDRESS=your.email@gmail.com
+EMAIL_PASSWORD=your_app_password
+TO_ADDRESS=recipient@example.com
+
+
+⚠️ Note:
+For Gmail, enable 2FA (Two Factor Authentication) and use an App Password — not your normal password.
+
+4. RUN THE SCRIPT
+
+Use this command to run the script:
+
+python main.py
+
+
+You will be asked to enter:
+
+Subject
+
+Body
+
+Recipient(s)
+
+Attachment path (optional)
+
+5. WHAT HAPPENS
+
+The script reads your .env credentials.
+
+Sends an email with the given subject and body.
+
+If attachment is provided, it adds that file to the email.
+
+You’ll see a success message once it’s sent.
+
+6. SECURITY TIPS
+
+❌ Never upload .env to GitHub.
+
+🔒 Keep your credentials safe.
+
+🪪 Use App Passwords for email accounts.
+
+7. TROUBLESHOOTING
+Problem	Possible Fix
+❌ SMTPAuthenticationError	Check your email or App Password
+❌ FileNotFoundError	Check your attachment file path
+✅ Email sent successfully!	You’ll see “Email sent successfully!” in the terminal
