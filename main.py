@@ -1,8 +1,8 @@
 import os
-import smtplib
 from email.message import EmailMessage
+import smtplib
 from dotenv import load_dotenv
-from datetime import datetime
+
 
 # ==========================================
 # LOAD CONFIGURATION
@@ -10,11 +10,41 @@ from datetime import datetime
 load_dotenv()
 
 # Fetch environment variables
+=======
+# Load environment variables from .env file
+load_dotenv()
+
+# Fetch credentials
+
 SMTP_HOST = os.getenv("SMTP_HOST")
 SMTP_PORT = os.getenv("SMTP_PORT", "587")
 EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 TO_ADDRESS = os.getenv("TO_ADDRESS")
+
+
+=======
+def check_env():
+    """Check and prompt for missing environment variables"""
+    missing = []
+    for key, value in {
+        "SMTP_HOST": SMTP_HOST,
+        "SMTP_PORT": SMTP_PORT,
+        "EMAIL_ADDRESS": EMAIL_ADDRESS,
+        "EMAIL_PASSWORD": EMAIL_PASSWORD,
+        "TO_ADDRESS": TO_ADDRESS,
+    }.items():
+        if not value:
+            missing.append(key)
+
+    if missing:
+        print(f"⚠️ Missing values in .env file: {', '.join(missing)}")
+        for key in missing:
+            os.environ[key] = input(f"Enter {key}: ")
+
+def send_email(subject: str, body: str):
+    """Send an email using SMTP credentials"""
+    check_env()
 
 
 # ==========================================
@@ -84,6 +114,7 @@ def send_email():
     # Create message
     msg = EmailMessage()
     msg["From"] = os.getenv("EMAIL_ADDRESS")
+
     msg["To"] = recipients
     msg["Subject"] = subject
 
@@ -96,17 +127,28 @@ def send_email():
     attach_files(msg)
 
     # Send email
+=======
+    msg["To"] = os.getenv("TO_ADDRESS")
+    msg["Subject"] = subject
+    msg.set_content(body)
+
+
     try:
         with smtplib.SMTP(os.getenv("SMTP_HOST"), int(os.getenv("SMTP_PORT"))) as smtp:
             smtp.ehlo()
             smtp.starttls()
             smtp.login(os.getenv("EMAIL_ADDRESS"), os.getenv("EMAIL_PASSWORD"))
             smtp.send_message(msg)
+
             print("\n✅ Email sent successfully!")
             log_email("SUCCESS", subject, recipients)
+=======
+            print("✅ Email sent successfully!")
+
     except Exception as e:
         print(f"\n❌ Failed to send email: {e}")
         log_email("FAILED", subject, recipients)
+
 
 
 # ==========================================
@@ -119,3 +161,10 @@ if __name__ == "__main__":
 
     send_email()
     print("\n📝 Email details logged in email_log.txt")
+=======
+if __name__ == "__main__":
+    print("📧 Auto Emailer Started")
+    subject = input("Enter email subject: ")
+    body = input("Enter email body: ")
+    send_email(subject, body)
+
