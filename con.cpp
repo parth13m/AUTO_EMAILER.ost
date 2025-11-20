@@ -10,5 +10,6 @@ int main ()
     cout<<"My registration id is : ";
     cin>>regid;
     cout<<regid;
+    cout<<"IT";
     return 0;
 }
